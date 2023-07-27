@@ -204,4 +204,11 @@ class App
       puts "#{index + 1}. #{rental.book.title}, rented on #{rental.date}"
     end
   end
+
+  public
+
+  def exit_app
+    puts 'Thank you for using this App.'
+    exit
+  end
 end
