@@ -91,40 +91,40 @@ class App
 
   def create_rental
     if @people.empty? || @books.empty?
-      puts "No people or books available to create a rental."
+      puts 'No people or books available to create a rental.'
       return
     end
-  
-    puts "Select the book for the rental:"
+
+    puts 'Select the book for the rental:'
     list_books
-    print "Select a book from the following list by number: "
+    print 'Select a book from the following list by number: '
     book_index = gets.chomp.to_i
-  
+
     book = @books[book_index]
-  
+
     if book.nil?
-      puts "Invalid book index."
+      puts 'Invalid book index.'
       return
     end
-  
-    puts "Select the person for the rental:"
+
+    puts 'Select the person for the rental:'
     list_people
-    print "Select a person from the following list by number (not id): "
+    print 'Select a person from the following list by number (not id): '
     person_index = gets.chomp.to_i
-  
+
     person = @people[person_index]
-  
+
     if person.nil?
-      puts "Invalid person index."
+      puts 'Invalid person index.'
       return
     end
-  
-    print "Date (YYYY-MM-DD): "
+
+    print 'Date (YYYY-MM-DD): '
     date = gets.chomp
-  
-    rental = person.add_rental(date, book)
-  
-    puts "Rental created successfully!"
+
+    person.add_rental(date, book)
+
+    puts 'Rental created successfully!'
   end
 
   def list_rentals_for_person
