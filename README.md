@@ -94,6 +94,12 @@ No tests here...
 - Twitter: [@sndprs](https://twitter.com/sndprs)
 - LinkedIn: [shalininayan](https://www.linkedin.com/in/shalininayan/)
 
+👤 **Ronnie Bisaso**
+
+- GitHub: [@bronnie313](https://github.com/bronnie313)
+- Twitter: [@bisaso_r](https://twitter.com/bisaso_r)
+- LinkedIn: [Ronald Bisaso](https://www.linkedin.com/in/ronnie-bisaso-758017120/)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- FUTURE FEATURES -->
