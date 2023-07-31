@@ -1,10 +1,10 @@
-# class LibraryApp
-#   def initialize
-#     @app = App.new
-#   end
+class LibraryApp
+  def initialize
+    @app = App.new
+  end
 
-#   def start
-#     menu = Menu.new(@app)
-#     menu.display
-#   end
-# end
+  def start
+    menu = Menu.new(@app)
+    menu.display
+  end
+end
