@@ -6,8 +6,8 @@ require_relative 'teacher'
 
 class App
   def initialize
-    @books = []
-    @people = []
+    @books = Book.load_books_from_json
+    @people = Person.load_people_from_json(@books)
   end
 
   def display_menu
@@ -95,18 +95,6 @@ class App
       return
     end
 
-    puts 'Select the book for the rental:'
-    list_books
-    print 'Select a book from the following list by number: '
-    book_index = gets.chomp.to_i
-
-    book = @books[book_index]
-
-    if book.nil?
-      puts 'Invalid book index.'
-      return
-    end
-
     puts 'Select the person for the rental:'
     list_people
     print 'Select a person from the following list by number (not id): '
@@ -121,6 +109,13 @@ class App
 
     print 'Date (YYYY-MM-DD): '
     date = gets.chomp
+
+    book = select_book_for_rental
+
+    if book.nil?
+      puts 'Invalid book index.'
+      return
+    end
 
     person.add_rental(date, book)
 
@@ -143,8 +138,6 @@ class App
       list_person_rentals(person)
     end
   end
-
-  private
 
   def select_book_for_rental
     puts 'Select the book for the rental:'
@@ -205,10 +198,39 @@ class App
     end
   end
 
-  public
+  def load_data_from_files
+    @books = Book.load_books_from_json
+    @people = Person.load_people_from_json
+    load_rentals_data
+  end
+
+  def load_rentals_data
+    rentals_data = Rental.load_rentals_from_json
+    link_rentals_to_objects(rentals_data)
+  end
 
   def exit_app
     puts 'Thank you for using this App.'
     exit
+  end
+
+  def rentals_data
+    rentals_data = []
+    @people.each do |person|
+      person.rentals.each do |rental|
+        rentals_data << {
+          'date' => rental.date,
+          'book_title' => rental.book.title,
+          'person_id' => rental.person.id
+        }
+      end
+    end
+    rentals_data
+  end
+
+  def save_data_to_files
+    Book.save_books_to_json(@books)
+    Person.save_people_to_json(@people)
+    Rental.save_rentals_to_json(rentals_data)
   end
 end

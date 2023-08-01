@@ -28,6 +28,41 @@ class Person < Nameable
     rental
   end
 
+  def self.save_people_to_json(people)
+    people_data = people.map(&:to_hash)
+    File.write('people.json', JSON.pretty_generate(people_data))
+  end
+
+  def self.load_people_from_json(_books)
+    people_data = JSON.parse(File.read('people.json'))
+    people_data.map do |data|
+      if data['type'] == 'Student'
+        Student.new(name: data['name'], age: data['age'], parent_permission: data['parent_permission']).tap do |student|
+          data['rentals'].each do |rental_data|
+            Rental.new(rental_data['date'], nil, student)
+          end
+        end
+      elsif data['type'] == 'Teacher'
+        Teacher.new(data['specialization'], name: data['name'], age: data['age'], parent_permission: data['parent_permission']).tap do |teacher|
+          data['rentals'].each do |rental_data|
+            Rental.new(rental_data['date'], nil, teacher)
+          end
+        end
+      end
+    end
+  end
+
+  def to_hash
+    {
+      'type' => self.class.name,
+      'name' => @name,
+      'age' => @age,
+      'parent_permission' => @parent_permission,
+      'specialization' => @specialization,
+      'rentals' => @rentals.map { |rental| { 'date' => rental.date } }
+    }
+  end
+
   private
 
   def of_age?
