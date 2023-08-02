@@ -9,6 +9,7 @@ class App
     @books = Book.load_books_from_json
     @people = Person.load_people_from_json(@books)
   end
+
   def display_menu
     puts "\nOptions:"
     puts '1. List all books'
@@ -20,6 +21,7 @@ class App
     puts '7. Quit'
     print 'Enter the option number: '
   end
+
   def list_books
     if @books.empty?
       puts 'No books available.'
@@ -30,6 +32,7 @@ class App
       end
     end
   end
+
   def list_people
     if @people.empty?
       puts 'No people available.'
@@ -40,6 +43,7 @@ class App
       end
     end
   end
+
   def create_student
     print "Enter the student's age: "
     age = gets.chomp.to_i
@@ -52,6 +56,7 @@ class App
     @people << student
     puts "Student created successfully! (ID: #{student.id})"
   end
+
   def create_teacher
     print "Enter the teacher's age: "
     age = gets.chomp.to_i
@@ -63,6 +68,7 @@ class App
     @people << teacher
     puts "Teacher created successfully! (ID: #{teacher.id})"
   end
+
   def create_book
     print "Enter the book's title: "
     title = gets.chomp
@@ -72,6 +78,7 @@ class App
     @books << book
     puts 'Book created successfully!'
   end
+
   def create_rental
     if @people.empty? || @books.empty?
       puts 'No people or books available to create a rental.'
@@ -96,6 +103,7 @@ class App
     person.add_rental(date, book)
     puts 'Rental created successfully!'
   end
+
   def list_rentals_for_person
     if @people.empty?
       puts 'No people available to list rentals.'
@@ -103,6 +111,7 @@ class App
     end
     person = select_person_to_list_rentals
     return unless person
+
     if person.rentals.empty?
       puts "No rentals found for #{person.class.name}: #{person.name} (ID: #{person.id})."
     else
@@ -110,6 +119,7 @@ class App
       list_person_rentals(person)
     end
   end
+
   def select_book_for_rental
     puts 'Select the book for the rental:'
     list_books
@@ -122,6 +132,7 @@ class App
     end
     book
   end
+
   def select_person_for_rental
     puts 'Select the person for the rental:'
     list_people
@@ -134,10 +145,12 @@ class App
     end
     person
   end
+
   def input_rental_date
     print 'Date (YYYY-MM-DD): '
     gets.chomp
   end
+
   def select_person_to_list_rentals
     puts 'Select the person ID to list rentals:'
     list_people
@@ -150,23 +163,28 @@ class App
     end
     person
   end
+
   def list_person_rentals(person)
     person.rentals.each_with_index do |rental, index|
       puts "#{index + 1}. #{rental.book.title}, rented on #{rental.date}"
     end
   end
+
   def load_data_from_files
     @books = Book.load_books_from_json
     @people = Person.load_people_from_json(@books)
     load_rentals_data
   end
+
   def load_rentals_data
     @rentals = Rental.load_rentals_from_json(@books, @people)
   end
+
   def exit_app
     puts 'Thank you for using this App.'
     exit
   end
+
   def rentals_data
     rentals_data = []
     @people.each do |person|
@@ -180,6 +198,7 @@ class App
     end
     rentals_data
   end
+
   def save_data_to_files
     Book.save_books_to_json(@books)
     Person.save_people_to_json(@people)
