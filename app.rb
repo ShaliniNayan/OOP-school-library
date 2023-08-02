@@ -6,8 +6,8 @@ require_relative 'teacher'
 
 class App
   def initialize
-    @books = []
-    @people = []
+    @books = Book.load_books_from_json
+    @people = Person.load_people_from_json(@books)
   end
 
   def display_menu
@@ -47,33 +47,25 @@ class App
   def create_student
     print "Enter the student's age: "
     age = gets.chomp.to_i
-
     print "Enter the student's name: "
     name = gets.chomp
-
     print 'Has parent permission? [Y/N]: '
     parent_permission_input = gets.chomp.downcase
     parent_permission = %w[y yes].include?(parent_permission_input)
-
     student = Student.new(name: name, age: age, parent_permission: parent_permission)
     @people << student
-
     puts "Student created successfully! (ID: #{student.id})"
   end
 
   def create_teacher
     print "Enter the teacher's age: "
     age = gets.chomp.to_i
-
     print "Enter the teacher's name: "
     name = gets.chomp
-
     print "Enter the teacher's specialization: "
     specialization = gets.chomp
-
     teacher = Teacher.new(specialization, name: name, age: age)
     @people << teacher
-
     puts "Teacher created successfully! (ID: #{teacher.id})"
   end
 
@@ -82,10 +74,8 @@ class App
     title = gets.chomp
     print "Enter the book's author: "
     author = gets.chomp
-
     book = Book.new(title, author)
     @books << book
-
     puts 'Book created successfully!'
   end
 
@@ -94,36 +84,23 @@ class App
       puts 'No people or books available to create a rental.'
       return
     end
-
-    puts 'Select the book for the rental:'
-    list_books
-    print 'Select a book from the following list by number: '
-    book_index = gets.chomp.to_i
-
-    book = @books[book_index]
-
-    if book.nil?
-      puts 'Invalid book index.'
-      return
-    end
-
     puts 'Select the person for the rental:'
     list_people
     print 'Select a person from the following list by number (not id): '
     person_index = gets.chomp.to_i
-
     person = @people[person_index]
-
     if person.nil?
       puts 'Invalid person index.'
       return
     end
-
+    book = select_book_for_rental
+    if book.nil?
+      puts 'Invalid book index.'
+      return
+    end
     print 'Date (YYYY-MM-DD): '
     date = gets.chomp
-
     person.add_rental(date, book)
-
     puts 'Rental created successfully!'
   end
 
@@ -132,7 +109,6 @@ class App
       puts 'No people available to list rentals.'
       return
     end
-
     person = select_person_to_list_rentals
     return unless person
 
@@ -144,21 +120,16 @@ class App
     end
   end
 
-  private
-
   def select_book_for_rental
     puts 'Select the book for the rental:'
     list_books
     print 'Select a book from the following list by number: '
     book_index = gets.chomp.to_i
-
     book = @books[book_index]
-
     if book.nil?
       puts 'Invalid book index.'
       return nil
     end
-
     book
   end
 
@@ -167,14 +138,11 @@ class App
     list_people
     print 'Select a person from the following list by number (not id): '
     person_index = gets.chomp.to_i
-
     person = @people[person_index]
-
     if person.nil?
       puts 'Invalid person index.'
       return nil
     end
-
     person
   end
 
@@ -188,14 +156,11 @@ class App
     list_people
     print 'Enter the person ID: '
     person_id = gets.chomp.to_i
-
     person = @people.find { |p| p.id == person_id }
-
     if person.nil?
       puts 'Invalid person ID.'
       return nil
     end
-
     person
   end
 
@@ -205,10 +170,38 @@ class App
     end
   end
 
-  public
+  def load_data_from_files
+    @books = Book.load_books_from_json
+    @people = Person.load_people_from_json(@books)
+    load_rentals_data
+  end
+
+  def load_rentals_data
+    @rentals = Rental.load_rentals_from_json(@books, @people)
+  end
 
   def exit_app
     puts 'Thank you for using this App.'
     exit
+  end
+
+  def rentals_data
+    rentals_data = []
+    @people.each do |person|
+      person.rentals.each do |rental|
+        rentals_data << {
+          'date' => rental.date,
+          'book_title' => rental.book.title,
+          'person_id' => rental.person.id
+        }
+      end
+    end
+    rentals_data
+  end
+
+  def save_data_to_files
+    Book.save_books_to_json(@books)
+    Person.save_people_to_json(@people)
+    Rental.save_rentals_to_json(rentals_data)
   end
 end
