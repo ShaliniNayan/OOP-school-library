@@ -28,5 +28,47 @@
     "rentals": [
 
     ]
+  },
+  {
+    "type": "Student",
+    "name": "ron",
+    "age": 39,
+    "parent_permission": true,
+    "specialization": null,
+    "rentals": [
+
+    ]
+  },
+  {
+    "type": "Teacher",
+    "name": "bron",
+    "age": 0,
+    "parent_permission": true,
+    "specialization": "math",
+    "rentals": [
+
+    ]
+  },
+  {
+    "type": "Teacher",
+    "name": "tom",
+    "age": 49,
+    "parent_permission": true,
+    "specialization": "math",
+    "rentals": [
+
+    ]
+  },
+  {
+    "type": "Student",
+    "name": "ron",
+    "age": 39,
+    "parent_permission": true,
+    "specialization": null,
+    "rentals": [
+      {
+        "date": "2030-03-39"
+      }
+    ]
   }
 ]

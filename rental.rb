@@ -12,7 +12,7 @@ class Rental
     File.write('rentals.json', JSON.pretty_generate(rentals_data))
   end
 
-  def self.load_rentals_from_json
+  def self.load_rentals_from_json(books, people)
     rentals_data = JSON.parse(File.read('rentals.json'))
     rentals_data.map do |data|
       book = Book.find_by_title(books, data['book_title'])
@@ -20,7 +20,6 @@ class Rental
       Rental.new(data['date'], book, person)
     end
   end
-
   def to_hash
     {
       'date' => @date,
