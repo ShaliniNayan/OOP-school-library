@@ -34,4 +34,12 @@ class Book
   def self.find_by_title(books, title)
     books.find { |book| book.title == title }
   end
+
+  def correct_name
+    @title
+  end
+
+  def can_use_services?
+    true
+  end
 end
