@@ -20,6 +20,7 @@ class Rental
       Rental.new(data['date'], book, person)
     end
   end
+
   def to_hash
     {
       'date' => @date,
